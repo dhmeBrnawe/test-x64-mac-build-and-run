@@ -13,7 +13,7 @@ jobs:
       contents: write
       id-token: write
       attestations: write
-
+    
     env:
       NODE_NO_WARNINGS: 1
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
@@ -21,7 +21,16 @@ jobs:
       npm_config_fund: false
       USE_HARD_LINKS: false
 
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          # - windows-latest
+          # - ubuntu-latest
+          - macos-latest
+          - macos-15-intel
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +40,12 @@ jobs:
 
       - run: npm install
       - run: npm run compile -- -p never
-      - run: ls -lR dist
+
+      - run: ls -lR dist/mac-arm64/denokv-gui-client.app/Contents/Resources
+        if: matrix.os == 'macos-latest'
+
+      - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources
+        if: matrix.os == 'macos-15-intel'
 
       - uses: actions/attest-build-provenance@v2
         with:
@@ -40,5 +54,5 @@ jobs:
       - name: Upload compiled app
         uses: actions/upload-artifact@v4
         with:
-          name: macos-latest
+          name: ${{ matrix.os }}
           path: dist
