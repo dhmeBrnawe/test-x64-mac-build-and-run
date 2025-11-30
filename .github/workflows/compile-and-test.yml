@@ -34,7 +34,7 @@ jobs:
 
       - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar
       - run: echo "==============================================================="
-      - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar.unpacked
+      - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar.unpacked/node_modules/@deno
 
       - uses: actions/attest-build-provenance@v2
         with:

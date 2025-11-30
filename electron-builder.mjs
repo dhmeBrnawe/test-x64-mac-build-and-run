@@ -18,8 +18,8 @@ export default /** @type import('electron-builder').Configuration */
     mac: {
       identity: null,
       target: [
-        { target: "dmg", arch: ["x64", "arm64"] },
-        { target: "zip", arch: ["x64", "arm64"] },
+        { target: "dmg", arch: ["x64"] },
+        { target: "zip", arch: ["x64"] },
       ],
       icon: "buildResources/icon.icns",
     },
