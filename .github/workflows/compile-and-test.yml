@@ -31,7 +31,7 @@ jobs:
 
       - run: npm install
       - run: npm run compile -- -p never
-      - run: ls dist
+      - run: ls -lR dist
 
       - uses: actions/attest-build-provenance@v2
         with:
