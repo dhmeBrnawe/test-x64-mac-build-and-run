@@ -17,7 +17,6 @@ export default /** @type import('electron-builder').Configuration */
     generateUpdatesFilesForAllChannels: true,
     mac: {
       identity: null,
-      sign: null,
       target: [
         { target: "dmg", arch: ["x64", "arm64"] },
         { target: "zip", arch: ["x64", "arm64"] },
