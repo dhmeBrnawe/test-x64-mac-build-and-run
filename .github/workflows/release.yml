@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  workflow_call:
+
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download compiled app
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Extract the changelogs of the new release
+        run: node ./scripts/extractLastReleaseChangelog.js > RELEASE_NOTES.md
+
+      - name: Extract App's version
+        run: echo "APP_VERSION=v$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        run: |
+          gh release new $APP_VERSION \
+            --notes-file RELEASE_NOTES.md \
+            dist/denokv-gui-client* dist/latest*.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
