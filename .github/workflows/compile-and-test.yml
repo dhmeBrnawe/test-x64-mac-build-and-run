@@ -21,16 +21,7 @@ jobs:
       npm_config_fund: false
       USE_HARD_LINKS: false
 
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          # - windows-latest
-          # - ubuntu-latest
-          - macos-latest
-          - macos-15-intel
-
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-15-intel
 
     steps:
       - uses: actions/checkout@v4
@@ -41,11 +32,9 @@ jobs:
       - run: npm install
       - run: npm run compile -- -p never
 
-      - run: ls -lR dist/mac-arm64/denokv-gui-client.app/Contents/Resources
-        if: matrix.os == 'macos-latest'
-
-      - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources
-        if: matrix.os == 'macos-15-intel'
+      - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar
+      - run: echo "==============================================================="
+      - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar.unpacked
 
       - uses: actions/attest-build-provenance@v2
         with:
@@ -54,5 +43,5 @@ jobs:
       - name: Upload compiled app
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}
+          name: macos-15-intel
           path: dist
