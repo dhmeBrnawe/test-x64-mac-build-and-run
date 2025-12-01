@@ -53,7 +53,7 @@ jobs:
       #   run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
 
       - name: Unmount DMG
-        run: hdiutil detach "$MOUNT_POINT"
+        run: hdiutil detach "/Volumes/denokv-gui-client 1.10.0"
 
       - name: Remove Quarantine
         run: xattr -dr com.apple.quarantine /Applications/denokv-gui-client.app
