@@ -38,7 +38,7 @@ export default /** @type import('electron-builder').Configuration */
         to: "node_modules/@deno",
       },
       {
-        from: "deno-kv-napi.darwin-x64.node",
+        from: "kv-darwin-x64",
         to: "node_modules/@deno/kv-darwin-x64",
       },
       {
