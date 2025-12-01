@@ -33,20 +33,21 @@ jobs:
       - run: npm run compile -- -p never
       - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar.unpacked/node_modules/@deno/kv-*
       - run: ls dist
+      - run: mv ./dist/denokv-gui-client-1.10.0-mac-x64.dmg ./dist/denokv-gui-client.dmg
 
       - name: Mount DMG
         run: |
-          MOUNT_POINT=$(hdiutil attach ./dist/denokv-gui-client-1.10.0-mac-x64.dmg | grep Volumes | awk '{print $3}')
+          MOUNT_POINT=$(hdiutil attach ./dist/denokv-gui-client.dmg | grep Volumes | awk '{print $3}')
           echo "MOUNT_POINT=$MOUNT_POINT" >> $GITHUB_ENV
 
       - name: Where is the App
         run: echo "$MOUNT_POINT"
 
       - name: Where is the App
-        run: ls /Volumes
+        run: ls /Volumes/denokv-gui-client
 
       - name: Install App
-        run: cp -R "$MOUNT_POINT"/denokv-gui-client-1.10.0-mac-x64.app /Applications/
+        run: cp -R "$MOUNT_POINT"/denokv-gui-client /Applications/
 
       # - name: Install App
       #   run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
