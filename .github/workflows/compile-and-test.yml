@@ -32,7 +32,24 @@ jobs:
       - run: npm install
       - run: npm run compile -- -p never
       - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar.unpacked/node_modules/@deno/kv-*
-      - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar.unpacked/node_modules/@deno
+      - run: ls dist
+
+      - name: Mount DMG
+        run: |
+          MOUNT_POINT=$(hdiutil attach ./dist/denokv-gui-client-1.10.0-mac-arm64.dmg | grep Volumes | awk '{print $3}')
+          echo "MOUNT_POINT=$MOUNT_POINT" >> $GITHUB_ENV
+
+      - name: Install App
+        run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
+
+      - name: Unmount DMG
+        run: hdiutil detach "$MOUNT_POINT"
+
+      - name: Remove Quarantine
+        run: xattr -dr com.apple.quarantine /Applications/denokv-gui-client.app
+
+      - name: Run App
+        run: open /Applications/denokv-gui-client.app
 
       - uses: actions/attest-build-provenance@v2
         with:
