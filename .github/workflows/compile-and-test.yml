@@ -36,7 +36,7 @@ jobs:
 
       - name: Mount DMG
         run: |
-          MOUNT_POINT=$(hdiutil attach ./dist/denokv-gui-client-1.10.0-mac-arm64.dmg | grep Volumes | awk '{print $3}')
+          MOUNT_POINT=$(hdiutil attach ./dist/denokv-gui-client-1.10.0-mac-x64.dmg | grep Volumes | awk '{print $3}')
           echo "MOUNT_POINT=$MOUNT_POINT" >> $GITHUB_ENV
 
       - name: Install App
