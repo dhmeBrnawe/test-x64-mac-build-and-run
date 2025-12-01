@@ -44,10 +44,10 @@ jobs:
         run: echo "$MOUNT_POINT"
 
       - name: Where is the App
-        run: ls /Volumes/denokv-gui-client
+        run: ls -R /Volumes
 
       - name: Install App
-        run: cp -R "$MOUNT_POINT"/denokv-gui-client /Applications/
+        run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
 
       # - name: Install App
       #   run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
