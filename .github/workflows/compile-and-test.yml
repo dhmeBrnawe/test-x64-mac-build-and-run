@@ -47,7 +47,7 @@ jobs:
         run: ls -R /Volumes
 
       - name: Install App
-        run: cp -R /Volumes/denokv-gui-client.app /Applications/
+        run: cp -R "/Volumes/denokv-gui-client 1.10.0/denokv-gui-client.app" /Applications/
 
       # - name: Install App
       #   run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
@@ -56,10 +56,10 @@ jobs:
         run: hdiutil detach "$MOUNT_POINT"
 
       - name: Remove Quarantine
-        run: xattr -dr com.apple.quarantine /Applications/denokv-gui-client-1.10.0-mac-x64
+        run: xattr -dr com.apple.quarantine /Applications/denokv-gui-client.app
 
       - name: Run App
-        run: open /Applications/denokv-gui-client-1.10.0-mac-x64
+        run: open /Applications/denokv-gui-client.app
 
       - uses: actions/attest-build-provenance@v2
         with:
