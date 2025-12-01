@@ -39,17 +39,26 @@ jobs:
           MOUNT_POINT=$(hdiutil attach ./dist/denokv-gui-client-1.10.0-mac-x64.dmg | grep Volumes | awk '{print $3}')
           echo "MOUNT_POINT=$MOUNT_POINT" >> $GITHUB_ENV
 
+      - name: Where is the App
+        run: echo "$MOUNT_POINT"
+
+      - name: Where is the App
+        run: ls "$MOUNT_POINT"
+
       - name: Install App
-        run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
+        run: cp -R "$MOUNT_POINT"/denokv-gui-client-1.10.0-mac-x64.app /Applications/
+
+      # - name: Install App
+      #   run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
 
       - name: Unmount DMG
         run: hdiutil detach "$MOUNT_POINT"
 
       - name: Remove Quarantine
-        run: xattr -dr com.apple.quarantine /Applications/denokv-gui-client.app
+        run: xattr -dr com.apple.quarantine /Applications/denokv-gui-client-1.10.0-mac-x64
 
       - name: Run App
-        run: open /Applications/denokv-gui-client.app
+        run: open /Applications/denokv-gui-client-1.10.0-mac-x64
 
       - uses: actions/attest-build-provenance@v2
         with:
