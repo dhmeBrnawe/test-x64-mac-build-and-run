@@ -33,7 +33,8 @@ jobs:
 
       - name: Install the "x86_64-apple-darwin" binary for "@deno/kv"
         run: |
-          curl -sSL https://api.github.com/repos/dhmeBrnawe/denokv-x64-mac-build/releases/latest -o release.json
+          releaseUrl=https://api.github.com/repos/dhmeBrnawe/denokv-x64-mac-build/releases/latest
+          curl -sSL --retry 4 --retry-delay 2 --retry-max-time 10 $releaseUrl -o release.json
   
           # Check release.json exists and is not empty
           if [ ! -s release.json ]; then
@@ -50,7 +51,8 @@ jobs:
           fi
 
           # Download "deno-kv-napi.darwin-x64.node" binary
-          curl -L "$download_url" -o ./node_modules/@deno/kv-darwin-x64/deno-kv-napi.darwin-x64.node
+          binaryDist=./node_modules/@deno/kv-darwin-x64/deno-kv-napi.darwin-x64.node
+          curl -L --retry 3 --retry-delay 2 "$download_url" -o $binaryDist
 
       - name: Build the app
         run: npm run compile -- -p never
