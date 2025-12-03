@@ -55,8 +55,8 @@ jobs:
       - name: Build the app
         run: npm run compile -- -p never
 
-      - run: Unpack the archive that contains the code base code
-      - run: |
+      - name:  Unpack the archive that contains the code base code
+        run: |
           npm install -g @electron/asar
           mkdir unpack-asar
           asar extract ./dist/mac/denokv-gui-client.app/Contents/Resources/app.asar unpack-asar
