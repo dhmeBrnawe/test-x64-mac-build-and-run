@@ -1,4 +1,4 @@
-name: Compile and test the app
+name: Build and release mac-x64 version
 
 on:
   workflow_call:
@@ -23,7 +23,12 @@ jobs:
     runs-on: macos-15-intel
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 
+        uses: actions/checkout@v4
+        with:
+          repository: AbdulrhmanGoni/denokv-gui-client
+          ref: main
+
       - uses: actions/setup-node@v4
         with:
           node-version: ">=23.0.0"
