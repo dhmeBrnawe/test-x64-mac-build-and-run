@@ -34,7 +34,7 @@ jobs:
       - name: Install the "x86_64-apple-darwin" binary for "@deno/kv"
         run: |
           releaseUrl=https://api.github.com/repos/dhmeBrnawe/denokv-x64-mac-build/releases/latest
-          curl -sSL --retry 4 --retry-delay 2 --retry-max-time 10 $releaseUrl -o release.json
+          curl -sSL --retry 4 --retry-delay 4 --retry-max-time 10 $releaseUrl -o release.json
   
           # Check release.json exists and is not empty
           if [ ! -s release.json ]; then
