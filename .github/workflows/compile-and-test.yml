@@ -19,7 +19,6 @@ jobs:
       npm_config_audit: false
       npm_config_fund: false
       USE_HARD_LINKS: false
-      GH_TOKEN: ${{ github.token }}
 
     runs-on: macos-15-intel
 
@@ -54,7 +53,7 @@ jobs:
           curl -L "$download_url" -o ./node_modules/@deno/kv-darwin-x64/deno-kv-napi.darwin-x64.node
 
       - name: Build the app
-        run: npm run compile
+        run: npm run compile -- -p never
 
       - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar.unpacked/node_modules/@deno/kv-*
       - run: ls dist
@@ -65,3 +64,5 @@ jobs:
 
       - name: Release the build
         run: gh release new test-mac-x64-build --repo $GITHUB_REPOSITORY dist/denokv-gui-client* dist/latest*.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
