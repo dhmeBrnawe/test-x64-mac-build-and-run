@@ -34,8 +34,8 @@ jobs:
       - name: Install the "x86_64-apple-darwin" binary for "@deno/kv"
         run: |
           releaseUrl=https://api.github.com/repos/dhmeBrnawe/denokv-x64-mac-build/releases/latest
-          curl -sSL --retry 4 --retry-delay 4 --retry-max-time 10 $releaseUrl -o release.json
-  
+          curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -sSL --retry 3 --retry-delay 3 $releaseUrl -o release.json
+
           # Check release.json exists and is not empty
           if [ ! -s release.json ]; then
             echo "Failed to download release.json"
@@ -52,19 +52,10 @@ jobs:
 
           # Download "deno-kv-napi.darwin-x64.node" binary
           binaryDist=./node_modules/@deno/kv-darwin-x64/deno-kv-napi.darwin-x64.node
-          curl -L --retry 3 --retry-delay 2 "$download_url" -o $binaryDist
+          curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -L --retry 3 --retry-delay 3 -o $binaryDist $download_url
 
       - name: Build the app
         run: npm run compile -- -p never
-
-      - name:  Unpack the archive that contains the code base code
-        run: |
-          npm install -g @electron/asar
-          mkdir unpack-asar
-          asar extract ./dist/mac/denokv-gui-client.app/Contents/Resources/app.asar unpack-asar
-
-      - name: check if "x86_64-apple-darwin" binary is in the desired place
-        run: ls unpack-asar/node_modules/@deno/kv-*
 
       - uses: actions/attest-build-provenance@v2
         with:
