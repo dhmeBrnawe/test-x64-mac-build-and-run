@@ -65,5 +65,3 @@ jobs:
 
       - name: Release the build
         run: gh release new test-mac-x64-build --repo $GITHUB_REPOSITORY dist/denokv-gui-client* dist/latest*.yml
-        env:
-          GH_TOKEN: ${{ github.token }}
