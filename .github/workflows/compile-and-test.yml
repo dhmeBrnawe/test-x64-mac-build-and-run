@@ -62,13 +62,13 @@ jobs:
           asar extract ./dist/mac/denokv-gui-client.app/Contents/Resources/app.asar unpack-asar
 
       - name: check if "x86_64-apple-darwin" binary is in the desired place
-        run: ls unpack-asar && ls unpack-asar/node_modules/@deno/kv-*
+        run: ls unpack-asar/node_modules/@deno/kv-*
 
-      # - uses: actions/attest-build-provenance@v2
-      #   with:
-      #     subject-path: "dist/denokv-gui-client*, dist/latest*.yml"
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "dist/denokv-gui-client*, dist/latest*.yml"
 
-      # - name: Release the build
-      #   run: gh release new test-mac-x64-build --repo $GITHUB_REPOSITORY dist/denokv-gui-client* dist/latest*.yml
-      #   env:
-      #     GH_TOKEN: ${{ github.token }}
+      - name: Release the build
+        run: gh release new test-mac-x64-build --repo $GITHUB_REPOSITORY dist/denokv-gui-client* dist/latest*.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
