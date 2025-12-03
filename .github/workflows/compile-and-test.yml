@@ -19,6 +19,7 @@ jobs:
       npm_config_audit: false
       npm_config_fund: false
       USE_HARD_LINKS: false
+      GH_TOKEN: ${{ github.token }}
 
     runs-on: macos-15-intel
 
