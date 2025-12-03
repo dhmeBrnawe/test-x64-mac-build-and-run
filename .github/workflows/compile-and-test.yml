@@ -61,8 +61,8 @@ jobs:
           mkdir unpack-asar
           asar extract ./dist/mac/denokv-gui-client.app/Contents/Resources/app.asar unpack-asar
 
-      - run: check if "x86_64-apple-darwin" binary is in the desired place
-      - run: ls unpack-asar && ls unpack-asar/node_modules/@deno/kv-*
+      - name: check if "x86_64-apple-darwin" binary is in the desired place
+        run: ls unpack-asar && ls unpack-asar/node_modules/@deno/kv-*
 
       # - uses: actions/attest-build-provenance@v2
       #   with:
