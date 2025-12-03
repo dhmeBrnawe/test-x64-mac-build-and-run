@@ -23,12 +23,7 @@ jobs:
     runs-on: macos-15-intel
 
     steps:
-      - name: 
-        uses: actions/checkout@v4
-        with:
-          repository: AbdulrhmanGoni/denokv-gui-client
-          ref: main
-
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ">=23.0.0"
