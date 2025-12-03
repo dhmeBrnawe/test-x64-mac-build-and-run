@@ -16,7 +16,6 @@ jobs:
     
     env:
       NODE_NO_WARNINGS: 1
-      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       npm_config_audit: false
       npm_config_fund: false
       USE_HARD_LINKS: false
@@ -29,44 +28,39 @@ jobs:
         with:
           node-version: ">=23.0.0"
 
-      - run: npm install
-      - run: npm run compile -- -p never
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install the "x86_64-apple-darwin" binary for "@deno/kv"
+        run: |
+          curl -sSL https://api.github.com/repos/dhmeBrnawe/denokv-x64-mac-build/releases/latest -o release.json
+  
+          # Check release.json exists and is not empty
+          if [ ! -s release.json ]; then
+            echo "Failed to download release.json"
+            exit 1
+          fi
+
+          # Extract the download URL of the first asset
+          download_url=$(jq -r '.assets[0].browser_download_url' release.json)
+          if [[ -z "$download_url" ]]; then
+            echo "Failed to parse download_url from release.json"
+            cat release.json
+            exit 1
+          fi
+
+          # Download "deno-kv-napi.darwin-x64.node" binary
+          curl -L "$download_url" -o ./node_modules/@deno/kv-darwin-x64/deno-kv-napi.darwin-x64.node
+
+      - name: Build the app
+        run: npm run compile
+
       - run: ls -lR dist/mac/denokv-gui-client.app/Contents/Resources/app.asar.unpacked/node_modules/@deno/kv-*
       - run: ls dist
-      - run: mv ./dist/denokv-gui-client-1.10.0-mac-x64.dmg ./dist/denokv-gui-client.dmg
-
-      - name: Mount DMG
-        run: |
-          MOUNT_POINT=$(hdiutil attach ./dist/denokv-gui-client.dmg | grep Volumes | awk '{print $3}')
-          echo "MOUNT_POINT=$MOUNT_POINT" >> $GITHUB_ENV
-
-      - name: Where is the App
-        run: echo "$MOUNT_POINT"
-
-      - name: Where is the App
-        run: ls -R /Volumes
-
-      - name: Install App
-        run: cp -R "/Volumes/denokv-gui-client 1.10.0/denokv-gui-client.app" /Applications/
-
-      # - name: Install App
-      #   run: cp -R "$MOUNT_POINT"/denokv-gui-client.app /Applications/
-
-      - name: Unmount DMG
-        run: hdiutil detach "/Volumes/denokv-gui-client 1.10.0"
-
-      - name: Remove Quarantine
-        run: xattr -dr com.apple.quarantine /Applications/denokv-gui-client.app
-
-      - name: Run App
-        run: open /Applications/denokv-gui-client.app
 
       - uses: actions/attest-build-provenance@v2
         with:
           subject-path: "dist/denokv-gui-client*, dist/latest*.yml"
 
-      - name: Upload compiled app
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-15-intel
-          path: dist
+      - name: Release the build
+        run: gh release new test-mac-x64-build --repo $GITHUB_REPOSITORY dist/denokv-gui-client* dist/latest*.yml
